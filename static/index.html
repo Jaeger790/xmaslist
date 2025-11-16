@@ -3,433 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Christmas Wish List</title>
+    <title>🎄 Christmas Wish List 🎄</title>
     <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            height: 100vh;
-        }
-
-        #background-video {
-            position: fixed;
-            top: 0;
-            left: 0;
-            min-width: 100vw;
-            min-height: 100vh;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            object-fit: cover;
-            border: none;
-        }
-
-        .content {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
-            background: rgba(0, 0, 0, 0.3);
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        header {
-            text-align: center;
-            width: 100%;
-            max-width: 800px;
-        }
-
-        h1 {
-            margin-bottom: 20px;
-            font-size: 2.5em;
-            color: #fff;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-        }
-
-        .tables-container {
-            display: flex;
-            gap: 20px;
-            width: 100%;
-            max-width: 800px;
-            justify-content: space-around;
-            margin-bottom: 20px;
-        }
-
-        .single-table {
-            flex: 1;
-            font-family: Arial, sans-serif;
-            border-collapse: separate;
-            border-spacing: 0;
-            background: transparent;
-            border-radius: 15px 15px 5px 5px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            margin: 0 auto;
-        }
-
-        .single-table th {
-            background: rgba(0, 100, 0, 0.8);
-            color: white;
-            font-weight: bold;
-            border-bottom: none;
-            padding: 12px;
-            border: 2px solid #ffffff;
-            text-align: center;
-        }
-
-        .single-table td {
-            border: 2px solid #ffffff;
-            text-align: center;
-            padding: 12px;
-            position: relative;
-        }
-
-        .single-table tr:nth-child(even) td {
-            background: rgba(255, 107, 107, 0.7);
-            color: white;
-        }
-
-        .single-table tr:nth-child(odd) td {
-            background: rgba(255, 255, 255, 0.9);
-            color: #333;
-        }
-
-        .single-table tr:hover td {
-            background: rgba(255, 0, 0, 0.9) !important;
-            color: white;
-            transition: background 0.3s ease, color 0.3s ease;
-        }
-
-        .action-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.2em;
-            margin: 0 5px;
-            padding: 5px;
-            border-radius: 50%;
-            transition: transform 0.2s;
-        }
-
-        .action-btn:hover {
-            transform: scale(1.2);
-        }
-
-        .edit-btn {
-            color: #006400;
-        }
-
-        .delete-btn {
-            color: #8B0000;
-        }
-
-        .add-button {
-            padding: 12px 24px;
-            background: rgba(0, 100, 0, 0.8);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1em;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 15px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-        }
-
-        .add-button:hover {
-            background: rgba(0, 150, 0, 0.9);
-        }
-
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 15px;
-            max-width: 500px;
-            width: 90%;
-            text-align: center;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-            color: #333;
-        }
-
-        .modal h2 {
-            margin-top: 0;
-            color: rgba(0, 100, 0, 0.8);
-        }
-
-        .modal input, .modal select {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        .modal button {
-            padding: 12px 24px;
-            margin: 10px 5px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .save-btn {
-            background: rgba(0, 100, 0, 0.8);
-            color: white;
-        }
-
-        .save-btn:hover {
-            background: rgba(0, 150, 0, 0.9);
-        }
-
-        .cancel-btn {
-            background: rgba(139, 0, 0, 0.8);
-            color: white;
-        }
-
-        .cancel-btn:hover {
-            background: rgba(199, 0, 0, 0.9);
-        }
-
-        @media (max-width: 768px) {
-            #background-video { min-height: 120vh; }
-            .tables-container { flex-direction: column; gap: 15px; }
-            .modal { padding: 20px; width: 95%; }
-            .single-table { border-radius: 10px 10px 3px 3px; }
-            td, th { font-size: 0.9em; padding: 8px; border-width: 1px; }
-            h1 { font-size: 2em; }
-            .action-btn { font-size: 1em; }
-        }
+        html, body { margin: 0; padding: 0; font-family: Arial, sans-serif; height: 100vh; }
+        #bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; object-fit: cover; }
+        .content { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; padding: 20px; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.7); background: rgba(0,0,0,0.3); }
+        h1 { font-size: 2.5em; margin-bottom: 20px; text-shadow: 0 0 10px rgba(255,255,255,0.8); }
+        .tables { display: flex; gap: 20px; max-width: 800px; width: 100%; }
+        table { flex: 1; border-collapse: separate; border-spacing: 0; background: transparent; border-radius: 15px 15px 5px 5px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        th { background: rgba(0,100,0,0.8); color: white; padding: 12px; border: 2px solid #fff; }
+        td { padding: 12px; border: 2px solid #fff; }
+        tr:nth-child(even) td { background: rgba(255,107,107,0.7); color: white; }
+        tr:nth-child(odd) td { background: rgba(255,255,255,0.9); color: #333; }
+        tr:hover td { background: rgba(255,0,0,0.9) !important; color: white; }
+        .btn { padding: 12px 24px; background: rgba(0,100,0,0.8); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+        .btn:hover { background: rgba(0,150,0,0.9); }
+        .action-btn { background: none; border: none; font-size: 1.2em; cursor: pointer; margin: 0 5px; }
+        .edit-btn { color: #006400; }
+        .delete-btn { color: #8B0000; }
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
+        .modal { background: rgba(255,255,255,0.95); color: #333; padding: 30px; border-radius: 15px; width: 90%; max-width: 500px; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+        .modal h2 { color: rgba(0,100,0,0.8); }
+        input, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; }
+        .modal button { padding: 12px 24px; margin: 5px; border: none; border-radius: 4px; cursor: pointer; }
+        .save { background: rgba(0,100,0,0.8); color: white; }
+        .cancel { background: rgba(139,0,0,0.8); color: white; }
     </style>
 </head>
 <body>
-    <iframe id="background-video" 
-        src="https://www.youtube-nocookie.com/embed/SuK0PuaHEdg?autoplay=1&mute=1&loop=1&playlist=SuK0PuaHEdg&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0&playsinline=1"
-        title="Christmas Background" frameborder="0" 
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-        allowfullscreen></iframe>
+    <iframe id="bg" src="https://www.youtube-nocookie.com/embed/SuK0PuaHEdg?autoplay=1&mute=1&loop=1&playlist=SuK0PuaHEdg&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0&playsinline=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
     <div class="content">
-        <header>
-            <h1>Christmas Wish List</h1>
-
-            <div class="tables-container">
-                <table class="single-table" id="name1-table" data-person="Name1">
-                    <thead><tr><th>Name1</th><th>Actions</th></tr></thead>
-                    <tbody></tbody>
-                </table>
-
-                <table class="single-table" id="name2-table" data-person="Name2">
-                    <thead><tr><th>Name2</th><th>Actions</th></tr></thead>
-                    <tbody></tbody>
-                </table>
-
-                <table class="single-table" id="name3-table" data-person="Name3">
-                    <thead><tr><th>Name3</th><th>Actions</th></tr></thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-
-            <button class="add-button" onclick="openAddModal()">Add Item</button>
-        </header>
+        <h1>🎄 Christmas Wish List 🎄</h1>
+        <div class="tables">
+            <table id="name1-table" data-person="Name1"><thead><tr><th>Name1</th><th>Actions</th></tr></thead><tbody></tbody></table>
+            <table id="name2-table" data-person="Name2"><thead><tr><th>Name2</th><th>Actions</th></tr></thead><tbody></tbody></table>
+            <table id="name3-table" data-person="Name3"><thead><tr><th>Name3</th><th>Actions</th></tr></thead><tbody></tbody></table>
+        </div>
+        <button class="btn" onclick="openAdd()">+ Add Gift</button>
     </div>
 
     <!-- Add Modal -->
-    <div class="overlay" id="add-overlay">
-        <div class="modal">
-            <h2>Add New Item</h2>
-            <form id="add-form">
-                <select id="table-select" required>
-                    <option value="">Select Person</option>
-                    <option value="name1-table">Name1</option>
-                    <option value="name2-table">Name2</option>
-                    <option value="name3-table">Name3</option>
-                </select>
-                <input type="text" id="item-input" placeholder="Enter gift idea..." required>
-                <div>
-                    <button type="submit" class="save-btn">Save</button>
-                    <button type="button" class="cancel-btn" onclick="closeAddModal()">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
+    <div class="overlay" id="add"><div class="modal">
+        <h2>🎁 Add Gift</h2>
+        <form id="add-form">
+            <select id="table-select" required>
+                <option value="">Select Person</option>
+                <option value="name1-table">Name1</option>
+                <option value="name2-table">Name2</option>
+                <option value="name3-table">Name3</option>
+            </select>
+            <input type="text" id="item" placeholder="Gift idea..." required>
+            <button type="submit" class="save">Save</button>
+            <button type="button" class="cancel" onclick="closeAdd()">Cancel</button>
+        </form>
+    </div></div>
 
     <!-- Edit Modal -->
-    <div class="overlay" id="edit-overlay">
-        <div class="modal">
-            <h2>Edit Item</h2>
-            <form id="edit-form">
-                <input type="hidden" id="edit-id">
-                <input type="text" id="edit-item" required>
-                <div>
-                    <button type="submit" class="save-btn">Update</button>
-                    <button type="button" class="cancel-btn" onclick="closeEditModal()">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
+    <div class="overlay" id="edit"><div class="modal">
+        <h2>✏️ Edit Gift</h2>
+        <form id="edit-form">
+            <input type="hidden" id="edit-id">
+            <input type="text" id="edit-item" required>
+            <button type="submit" class="save">Update</button>
+            <button type="button" class="cancel" onclick="closeEdit()">Cancel</button>
+        </form>
+    </div></div>
 
     <script>
-        const DB_URL = '/api'; // Proxied via render.yaml
-
+        const API = 'https://xmaslist-api.onrender.com';  // Your existing backend
         const tables = {
             'name1-table': document.getElementById('name1-table').querySelector('tbody'),
             'name2-table': document.getElementById('name2-table').querySelector('tbody'),
             'name3-table': document.getElementById('name3-table').querySelector('tbody')
         };
+        let editId = null;
 
-        let currentEditId = null;
-
-        async function loadItems() {
-            try {
-                const res = await fetch(`${DB_URL}/items`);
-                if (!res.ok) throw new Error();
-                const items = await res.json();
-
-                Object.values(tables).forEach(tbody => tbody.innerHTML = '');
-
-                items.forEach(item => {
-                    const tableId = `${item.person.toLowerCase().replace(' ', '')}-table`;
-                    if (tables[tableId]) addRowToTable(tableId, item);
-                });
-            } catch {
-                alert('Could not load list.');
-            }
+        async function load() {
+            const res = await fetch(`${API}/items`);
+            const items = await res.json();
+            Object.values(tables).forEach(t => t.innerHTML = '');
+            items.forEach(i => {
+                const id = `${i.person.toLowerCase().replace(' ', '')}-table`;
+                if (tables[id]) addRow(id, i);
+            });
         }
 
-        function addRowToTable(tableId, item) {
-            const tbody = tables[tableId];
-            const row = tbody.insertRow();
+        function addRow(tableId, item) {
+            const row = tables[tableId].insertRow();
             row.dataset.id = item.id;
-
-            const cell = row.insertCell(0);
-            cell.textContent = item.description;
-            cell.style.textAlign = 'left';
-            cell.style.paddingLeft = '15px';
-
-            const actionCell = row.insertCell(1);
-            actionCell.innerHTML = `
-                <button class="action-btn edit-btn" onclick="openEditModal(${item.id}, '${escapeHtml(item.description)}')">✏️</button>
-                <button class="action-btn delete-btn" onclick="deleteItem(${item.id}, this)">🗑️</button>
+            row.insertCell(0).textContent = item.description;
+            row.insertCell(1).innerHTML = `
+                <button class="action-btn edit-btn" onclick="openEdit(${item.id}, '${escape(item.description)}')">✏️</button>
+                <button class="action-btn delete-btn" onclick="del(${item.id}, this)">🗑️</button>
             `;
-
-            const rowIndex = tbody.rows.length;
-            const isEven = rowIndex % 2 === 0;
-            cell.style.backgroundColor = isEven ? 'rgba(255, 107, 107, 0.7)' : 'rgba(255, 255, 255, 0.9)';
-            cell.style.color = isEven ? 'white' : '#333';
         }
 
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
+        function escape(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
 
-        function openAddModal() {
-            document.getElementById('add-overlay').style.display = 'flex';
-            document.getElementById('add-form').reset();
-        }
+        function openAdd() { document.getElementById('add').style.display = 'flex'; document.getElementById('add-form').reset(); }
+        function closeAdd() { document.getElementById('add').style.display = 'none'; }
 
-        function closeAddModal() {
-            document.getElementById('add-overlay').style.display = 'none';
-        }
-
-        document.getElementById('add-form').addEventListener('submit', async (e) => {
+        document.getElementById('add-form').onsubmit = async e => {
             e.preventDefault();
             const tableId = document.getElementById('table-select').value;
-            const description = document.getElementById('item-input').value.trim();
+            const desc = document.getElementById('item').value.trim();
             const person = document.querySelector(`#${tableId}`).dataset.person;
+            const res = await fetch(`${API}/items`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ person, description: desc }) });
+            const newItem = await res.json();
+            addRow(tableId, newItem);
+            closeAdd();
+        };
 
-            if (!tableId || !description) return alert('Fill all fields!');
-
-            try {
-                const res = await fetch(`${DB_URL}/items`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ person, description })
-                });
-                if (!res.ok) throw new Error();
-                const newItem = await res.json();
-                addRowToTable(tableId, newItem);
-                closeAddModal();
-            } catch {
-                alert('Add failed.');
-            }
-        });
-
-        function openEditModal(id, description) {
-            currentEditId = id;
+        function openEdit(id, desc) {
+            editId = id;
             document.getElementById('edit-id').value = id;
-            document.getElementById('edit-item').value = description;
-            document.getElementById('edit-overlay').style.display = 'flex';
+            document.getElementById('edit-item').value = desc;
+            document.getElementById('edit').style.display = 'flex';
         }
+        function closeEdit() { document.getElementById('edit').style.display = 'none'; }
 
-        function closeEditModal() {
-            document.getElementById('edit-overlay').style.display = 'none';
-            currentEditId = null;
-        }
-
-        document.getElementById('edit-form').addEventListener('submit', async (e) => {
+        document.getElementById('edit-form').onsubmit = async e => {
             e.preventDefault();
-            const description = document.getElementById('edit-item').value.trim();
-            if (!description) return alert('Cannot be empty!');
+            const desc = document.getElementById('edit-item').value.trim();
+            const res = await fetch(`${API}/items/${editId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ description: desc }) });
+            const updated = await res.json();
+            document.querySelector(`tr[data-id="${editId}"]`).cells[0].textContent = updated.description;
+            closeEdit();
+        };
 
-            try {
-                const res = await fetch(`${DB_URL}/items/${currentEditId}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ description })
-                });
-                if (!res.ok) throw new Error();
-                const updatedItem = await res.json();
-                const row = document.querySelector(`tr[data-id="${currentEditId}"]`);
-                if (row) row.cells[0].textContent = updatedItem.description;
-                closeEditModal();
-            } catch {
-                alert('Update failed.');
-            }
-        });
-
-        async function deleteItem(id, button) {
-            if (!confirm('Delete this gift?')) return;
-            try {
-                const res = await fetch(`${DB_URL}/items/${id}`, { method: 'DELETE' });
-                if (!res.ok) throw new Error();
-                button.closest('tr').remove();
-            } catch {
-                alert('Delete failed.');
+        async function del(id, btn) {
+            if (confirm('Delete gift?')) {
+                await fetch(`${API}/items/${id}`, { method: 'DELETE' });
+                btn.closest('tr').remove();
             }
         }
 
-        document.querySelectorAll('.overlay').forEach(overlay => {
-            overlay.addEventListener('click', (e) => {
-                if (e.target === overlay) overlay.style.display = 'none';
-            });
-        });
-
-        window.onload = loadItems;
+        document.querySelectorAll('.overlay').forEach(o => o.onclick = e => { if (e.target === o) o.style.display = 'none'; });
+        window.onload = load;
     </script>
 </body>
 </html>
