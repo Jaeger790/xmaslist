@@ -19,7 +19,6 @@ projects:
       name: xmaslist
       env: static
       repo: https://github.com/Jaeger790/xmaslist
-      region: oregon
       buildCommand: echo "No build needed"
       staticPublishPath: ./static
       autoDeployTrigger: commit
