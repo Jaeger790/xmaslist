@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Christmas List</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+        }
+
+        #background-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            min-width: 100vw;
+            min-height: 100vh;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            object-fit: cover;
+            border: none;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        header {
+            text-align: center;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+
+        /* Tables container: Stack vertically on mobile, side-by-side on desktop */
+        .tables-container {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            max-width: 800px;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .single-table {
+            flex: 1;
+            font-family: Arial, sans-serif;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: transparent;
+            border-radius: 15px 15px 5px 5px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            margin: 0 auto;
+        }
+
+        .single-table th {
+            background: rgba(0, 100, 0, 0.8);  /* Green header */
+            color: white;
+            font-weight: bold;
+            border-bottom: none;
+            padding: 12px;
+            border: 2px solid #ffffff;
+            text-align: center;
+        }
+
+        .single-table td {
+            border: 2px solid #ffffff;
+            text-align: center;
+            padding: 12px;
+            position: relative;
+        }
+
+        .single-table tr:nth-child(even) td {
+            background: rgba(255, 107, 107, 0.7);  /* Red stripe */
+        }
+
+        .single-table tr:nth-child(odd) td {
+            background: rgba(255, 255, 255, 0.9);  /* White stripe */
+            color: #333;
+        }
+
+        .single-table tr:hover td {
+            background: rgba(255, 0, 0, 0.9) !important;
+            color: white;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .single-table tr:first-child th:first-child {
+            border-top-left-radius: 15px;
+        }
+
+        /* Add button styles */
+        .add-button {
+            padding: 12px 24px;
+            background: rgba(0, 100, 0, 0.8);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .add-button:hover {
+            background: rgba(0, 150, 0, 0.9);
+        }
+
+        /* Overlay modal styles */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            color: #333;
+        }
+
+        .modal h2 {
+            margin-top: 0;
+            color: rgba(0, 100, 0, 0.8);
+        }
+
+        .modal input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .modal select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .modal button {
+            padding: 12px 24px;
+            margin: 10px 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .save-btn {
+            background: rgba(0, 100, 0, 0.8);
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: rgba(0, 150, 0, 0.9);
+        }
+
+        .cancel-btn {
+            background: rgba(139, 0, 0, 0.8);
+            color: white;
+        }
+
+        .cancel-btn:hover {
+            background: rgba(199, 0, 0, 0.9);
+        }
+
+        @media (max-width: 768px) {
+            #background-video { min-height: 120vh; }
+            .tables-container { flex-direction: column; gap: 15px; }
+            .modal { padding: 20px; width: 95%; }
+            table { border-radius: 10px 10px 3px 3px; }
+            td, th { font-size: 0.9em; padding: 8px; border-width: 1px; }
+            h1 { font-size: 2em; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Your full-screen looping iframe -->
+    <iframe id="background-video" 
+        width="100%" 
+        height="100%" 
+        src="https://www.youtube-nocookie.com/embed/SuK0PuaHEdg?autoplay=1&mute=1&loop=1&playlist=SuK0PuaHEdg&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0&playsinline=1"
+        title="YouTube video player" frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        referrerpolicy="strict-origin-when-cross-origin" 
+        allowfullscreen>
+    </iframe>
+
+    <div class="content">
+        <header>
+            <h1>Christmas List</h1>
+
+            <!-- Three separate tables -->
+            <div class="tables-container">
+                <table class="single-table" id="name1-table">
+                    <thead>
+                        <tr><th>Name1</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Item1 Name 1</td></tr>
+                        <tr><td>Item2 Name1</td></tr>
+                    </tbody>
+                </table>
+
+                <table class="single-table" id="name2-table">
+                    <thead>
+                        <tr><th>Name2</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Item1 Name 2</td></tr>
+                        <tr><td>Item2 Name2</td></tr>
+                    </tbody>
+                </table>
+
+                <table class="single-table" id="name3-table">
+                    <thead>
+                        <tr><th>Name3</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Item1 Name3</td></tr>
+                        <tr><td>Item2 Name3</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Single Add Item button -->
+            <button class="add-button" onclick="openModal()">Add Item</button>
+        </header>
+    </div>
+
+    <!-- Overlay modal -->
+    <div class="overlay" id="overlay">
+        <div class="modal">
+            <h2>Add New Item</h2>
+            <form id="add-form">
+                <select id="table-select" required>
+                    <option value="">Select Table</option>
+                    <option value="name1-table">Name1 Table</option>
+                    <option value="name2-table">Name2 Table</option>
+                    <option value="name3-table">Name3 Table</option>
+                </select>
+                <input type="text" id="item-input" placeholder="Enter item details" required>
+                <div>
+                    <button type="submit" class="save-btn">Save</button>
+                    <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const overlay = document.getElementById('overlay');
+        const form = document.getElementById('add-form');
+
+        function openModal() {
+            overlay.style.display = 'flex';
+            form.reset();
+        }
+
+        function closeModal() {
+            overlay.style.display = 'none';
+        }
+
+        // Close on backdrop click
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) closeModal();
+        });
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const tableId = document.getElementById('table-select').value;
+            const item = document.getElementById('item-input').value.trim();
+
+            if (!tableId || !item) {
+                alert('Please select a table and enter an item!');
+                return;
+            }
+
+            const table = document.getElementById(tableId);
+            const tbody = table.querySelector('tbody');
+
+            // Create new row and add item
+            const newRow = tbody.insertRow();
+            const newCell = newRow.insertCell(0);
+            newCell.textContent = item;
+
+            // Apply striping
+            const rowNum = tbody.rows.length;
+            if (rowNum % 2 === 0) {
+                newCell.style.backgroundColor = 'rgba(255, 107, 107, 0.7)';
+                newCell.style.color = 'white';
+            } else {
+                newCell.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+                newCell.style.color = '#333';
+            }
+
+            closeModal();
+        });
+    </script>
+</body>
+</html>
