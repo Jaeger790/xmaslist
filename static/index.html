@@ -75,7 +75,9 @@
     <div class="debug" id="debug">Status: Loading...</div>
 
     <script>
-        const API = 'https://xmaslist-api.onrender.com';
+        // === UPDATE THIS LINE WITH YOUR ACTUAL BACKEND URL ===
+        const API = 'https://xmaslist-api.onrender.com';  // ← CHANGE IF DIFFERENT!
+
         const tables = {
             'name1-table': document.getElementById('name1-table').querySelector('tbody'),
             'name2-table': document.getElementById('name2-table').querySelector('tbody'),
@@ -90,9 +92,9 @@
         }
 
         async function load() {
-            log('Loading items...');
+            log(`Loading from ${API}/items...`);
             try {
-                const res = await fetch(`${API}/items`);
+                const res = await fetch(`${API}/items`, { method: 'GET' });
                 if (!res.ok) {
                     const err = await res.text();
                     throw new Error(`HTTP ${res.status}: ${err}`);
@@ -140,10 +142,9 @@
         }
         function closeAdd() { document.getElementById('add').style.display = 'none'; }
 
-        // === FIXED: Use addEventListener instead of onsubmit ===
         document.getElementById('add-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            log('Save button clicked');
+            log('Save clicked');
             const tableId = document.getElementById('table-select').value;
             const desc = document.getElementById('item').value.trim();
             if (!tableId || !desc) {
@@ -151,7 +152,7 @@
                 return alert('Please select a person and enter a gift!');
             }
             const person = document.querySelector(`#${tableId}`).dataset.person;
-            log(`Adding: ${person} - ${desc}`);
+            log(`Sending POST to ${API}/items: ${person} - ${desc}`);
             try {
                 const res = await fetch(`${API}/items`, {
                     method: 'POST',
@@ -165,7 +166,7 @@
                 const newItem = await res.json();
                 addRow(tableId, newItem);
                 closeAdd();
-                log('Item added successfully!');
+                log('Added successfully!');
             } catch (err) {
                 log(`Add failed: ${err.message}`);
                 alert('❄️ Add failed! Check debug panel.');
@@ -185,7 +186,7 @@
             e.preventDefault();
             const desc = document.getElementById('edit-item').value.trim();
             if (!desc) return alert('Cannot be empty!');
-            log(`Updating ID ${editId} to "${desc}"`);
+            log(`Updating ID ${editId}`);
             try {
                 const res = await fetch(`${API}/items/${editId}`, {
                     method: 'PUT',
@@ -196,7 +197,7 @@
                 const updated = await res.json();
                 document.querySelector(`tr[data-id="${editId}"]`).cells[0].textContent = updated.description;
                 closeEdit();
-                log('Item updated!');
+                log('Updated!');
             } catch (err) {
                 log(`Update failed: ${err.message}`);
                 alert('❄️ Update failed!');
@@ -210,7 +211,7 @@
                 const res = await fetch(`${API}/items/${id}`, { method: 'DELETE' });
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 btn.closest('tr').remove();
-                log('Item deleted!');
+                log('Deleted!');
             } catch (err) {
                 log(`Delete failed: ${err.message}`);
                 alert('❄️ Delete failed!');
@@ -219,9 +220,8 @@
 
         document.querySelectorAll('.overlay').forEach(o => o.onclick = e => { if (e.target === o) o.style.display = 'none'; });
 
-        // Load on start
         window.onload = () => {
-            log('Page loaded, connecting to API...');
+            log(`Page loaded. API URL: ${API}`);
             load();
         };
     </script>
