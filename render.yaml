@@ -1,0 +1,22 @@
+services:
+  # === Backend API ===
+  - type: web
+    name: xmaslist-api
+    env: node
+    buildCommand: npm install
+    startCommand: node server.js
+    plan: free
+    region: oregon
+
+  # === Static Site ===
+  - type: static
+    name: xmaslist-frontend
+    env: static
+    buildCommand: echo "No build needed"
+    staticPublishPath: ./static
+    plan: free
+    region: oregon
+    routes:
+      - type: rewrite
+        source: /api/**
+        destination: https://xmaslist-api.onrender.com/**
