@@ -1,19 +1,38 @@
-# render.yaml
-services:
-  # Backend API
-  - type: web
-    name: xmaslist-api
-    env: node
-    buildCommand: npm install
-    startCommand: node server.js
-
-  # Frontend Static Site
-  - type: web
-    name: xmaslist
-    env: static
-    buildCommand: echo "No build needed"
-    staticPublishPath: ./static
-    routes:
-      - type: rewrite
-        source: /api/**
-        destination: https://xmaslist-api.onrender.com/**
+version: "1"
+projects:
+- name: xmaslist-project
+  environments:
+  - name: Production
+    services:
+    - type: web
+      name: xmaslist-api
+      runtime: node
+      repo: https://github.com/Jaeger790/xmaslist
+      region: oregon
+      buildCommand: npm install
+      startCommand: node server.js
+      autoDeployTrigger: commit
+      envVars:
+      - key: DATABASE_URL
+        value: postgresql://brit:6G4bKPZVrGJpQ3YcUKwNcSUk0WFVblI8@dpg-d4d02k4hg0os73daf5rg-a:5432/xmaslist_jlbp?sslmode=require
+    - type: web
+      name: xmaslist
+      env: static
+      repo: https://github.com/Jaeger790/xmaslist
+      region: oregon
+      buildCommand: echo "No build needed"
+      staticPublishPath: ./static
+      autoDeployTrigger: commit
+      envVars:
+      - key: REACT_APP_API_URL  # Or your env prefix if needed
+        value: https://xmaslist-api.onrender.com
+    databases:
+    - name: xmaslist-db
+      databaseName: xmaslist_jlbp
+      user: brit
+      plan: free
+      region: oregon
+      ipAllowList:
+      - source: 0.0.0.0/0
+        description: everywhere
+      postgresMajorVersion: "18"
