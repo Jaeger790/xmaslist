@@ -1,20 +1,17 @@
 const express = require('express');
 const { Pool } = require('pg');
-const cors = require('cors');  // ← ADD
+const cors = require('cors');
 
 const app = express();
-app.use(cors());               // ← ADD
+app.use(cors({ origin: '*' }));  // ← ALLOWS ALL ORIGINS (fixes CORS)
 app.use(express.json());
 
 const pool = new Pool({
-  host: 'dpg-d4d02k4hg0os73daf5rg-a',
-  port: 5432,
-  database: 'xmaslist_jlbp',
-  user: 'brit',
-  password: '6G4bKPZVrGJpQ3YcUKwNcSUk0WFVblI8',
+  connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
 });
 
+// Create table
 pool.query(`
   CREATE TABLE IF NOT EXISTS items (
     id SERIAL PRIMARY KEY,
@@ -24,18 +21,16 @@ pool.query(`
   )
 `).catch(console.error);
 
-// GET all
+// === ROUTES ===
 app.get('/items', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM items ORDER BY created_at DESC');
     res.json(result.rows);
   } catch (err) {
-    console.error(err);
     res.status(500).json({ error: 'DB error' });
   }
 });
 
-// POST
 app.post('/items', async (req, res) => {
   const { person, description } = req.body;
   if (!person || !description) return res.status(400).json({ error: 'Missing' });
@@ -50,7 +45,6 @@ app.post('/items', async (req, res) => {
   }
 });
 
-// PUT
 app.put('/items/:id', async (req, res) => {
   const { id } = req.params;
   const { description } = req.body;
@@ -67,7 +61,6 @@ app.put('/items/:id', async (req, res) => {
   }
 });
 
-// DELETE
 app.delete('/items/:id', async (req, res) => {
   const { id } = req.params;
   try {
@@ -80,5 +73,4 @@ app.delete('/items/:id', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`API on ${PORT}`));
-
+app.listen(PORT, () => console.log(`API running on ${PORT}`));
