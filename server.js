@@ -1,9 +1,9 @@
 const express = require('express');
 const { Pool } = require('pg');
-const cors = require('cors');
+const cors = require('cors');  // ← ADD
 
 const app = express();
-app.use(cors());
+app.use(cors());               // ← ADD
 app.use(express.json());
 
 const pool = new Pool({
@@ -81,3 +81,4 @@ app.delete('/items/:id', async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`API on ${PORT}`));
+
