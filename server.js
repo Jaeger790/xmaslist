@@ -8,7 +8,7 @@ app.use(express.json());
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
+  ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
 });
 
 // Create table
@@ -57,3 +57,4 @@ app.delete('/items/:id', async (req, res) => {
 app.listen(process.env.PORT || 3000, () => {
   console.log('API running');
 });
+
