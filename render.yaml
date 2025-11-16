@@ -1,5 +1,6 @@
+# render.yaml
 services:
-  # === Backend API ===
+  # Backend API
   - type: web
     name: xmaslist-api
     env: node
@@ -8,11 +9,12 @@ services:
     plan: free
     region: oregon
 
-  # === Static Site ===
-  - type: static
-    name: xmaslist-frontend
+  # Frontend Static Site
+  - type: web
+    name: xmaslist
     env: static
     buildCommand: echo "No build needed"
+    startCommand: echo "Serving static"
     staticPublishPath: ./static
     plan: free
     region: oregon
