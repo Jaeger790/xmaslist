@@ -22,41 +22,27 @@ pool.query(`
 
 // Routes
 app.get('/items', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM items');
-    res.json(result.rows);
-  } catch (err) {
-    res.status(500).send('DB error');
-  }
+  const { rows } = await pool.query('SELECT * FROM items');
+  res.json(rows);
 });
 
 app.post('/items', async (req, res) => {
   const { person, description } = req.body;
-  if (!person || !description) return res.status(400).send('Missing');
-  try {
-    const result = await pool.query(
-      'INSERT INTO items (person, description) VALUES ($1, $2) RETURNING *',
-      [person, description]
-    );
-    res.json(result.rows[0]);
-  } catch (err) {
-    res.status(500).send('Insert failed');
-  }
+  const { rows } = await pool.query(
+    'INSERT INTO items (person, description) VALUES ($1, $2) RETURNING *',
+    [person, description]
+  );
+  res.json(rows[0]);
 });
 
 app.put('/items/:id', async (req, res) => {
   const { id } = req.params;
   const { description } = req.body;
-  if (!description) return res.status(400).send('Required');
-  try {
-    const result = await pool.query(
-      'UPDATE items SET description = $1 WHERE id = $2 RETURNING *',
-      [description, id]
-    );
-    res.json(result.rows[0]);
-  } catch (err) {
-    res.status(500).send('Update failed');
-  }
+  const { rows } = await pool.query(
+    'UPDATE items SET description = $1 WHERE id = $2 RETURNING *',
+    [description, id]
+  );
+  res.json(rows[0]);
 });
 
 app.delete('/items/:id', async (req, res) => {
@@ -65,4 +51,4 @@ app.delete('/items/:id', async (req, res) => {
   res.json({ success: true });
 });
 
-app.listen(process.env.PORT || 3000, () => console.log('API live'));
+app.listen(process.env.PORT || 3000, () => console.log('API running'));
