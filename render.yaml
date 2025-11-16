@@ -7,7 +7,6 @@ services:
     buildCommand: npm install
     startCommand: node server.js
     plan: free
-    region: oregon
 
   # Frontend Static Site
   - type: web
@@ -17,7 +16,6 @@ services:
     startCommand: echo "Serving static"
     staticPublishPath: ./static
     plan: free
-    region: oregon
     routes:
       - type: rewrite
         source: /api/**
