@@ -292,8 +292,7 @@
     </div>
 
     <script>
-        // === CONFIG: Use same domain (Render Static Site) ===
-        const DB_URL = '/api'; // Proxied to backend
+        const DB_URL = '/api'; // Proxied via render.yaml
 
         const tables = {
             'name1-table': document.getElementById('name1-table').querySelector('tbody'),
@@ -306,7 +305,7 @@
         async function loadItems() {
             try {
                 const res = await fetch(`${DB_URL}/items`);
-                if (!res.ok) throw new Error('Server error');
+                if (!res.ok) throw new Error();
                 const items = await res.json();
 
                 Object.values(tables).forEach(tbody => tbody.innerHTML = '');
@@ -315,9 +314,8 @@
                     const tableId = `${item.person.toLowerCase().replace(' ', '')}-table`;
                     if (tables[tableId]) addRowToTable(tableId, item);
                 });
-            } catch (err) {
-                console.error(err);
-                alert('Could not load list. Check backend.');
+            } catch {
+                alert('Could not load list.');
             }
         }
 
