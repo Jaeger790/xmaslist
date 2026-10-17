@@ -14,7 +14,9 @@ projects:
       autoDeployTrigger: commit
       envVars:
       - key: DATABASE_URL
-        value: postgresql://brit:6G4bKPZVrGJpQ3YcUKwNcSUk0WFVblI8@dpg-d4d02k4hg0os73daf5rg-a:5432/xmaslist_jlbp?sslmode=require
+        fromDatabase:
+          name: xmaslist-db
+          property: connectionString
     - type: web
       name: xmaslist
       env: static
@@ -35,3 +37,4 @@ projects:
       - source: 0.0.0.0/0
         description: everywhere
       postgresMajorVersion: "18"
+
