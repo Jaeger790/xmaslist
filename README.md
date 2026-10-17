@@ -14,7 +14,7 @@ Install the Node.js dependencies with `npm install`. Set `DATABASE_URL` to a Pos
 
 ## Configuration
 
-The Render blueprint now reads `DATABASE_URL` from the managed database rather than committing a connection string. The database password previously committed in the blueprint must be rotated in Render. It remains in earlier Git commits.
+The Render blueprint leaves `DATABASE_URL` unconfigured (`sync: false`). Supply it privately in Render. `credentials.example.json` contains null placeholders and is not loaded automatically.
 
 ## Review findings
 
