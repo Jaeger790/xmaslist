@@ -14,7 +14,7 @@ projects:
       autoDeployTrigger: commit
       envVars:
       - key: DATABASE_URL
-        value: postgresql://brit:6G4bKPZVrGJpQ3YcUKwNcSUk0WFVblI8@dpg-d4d02k4hg0os73daf5rg-a:5432/xmaslist_jlbp?sslmode=require
+        sync: false
     - type: web
       name: xmaslist
       env: static
